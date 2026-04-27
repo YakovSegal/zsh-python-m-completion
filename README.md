@@ -1,30 +1,27 @@
 # zsh-python-m-completion
 
-Zsh plugin for `python -m` module completion.
+Zsh plugin for `python -m` module completion with fzf support.
 
 ## Requirements
 
 - Zsh
-- Python available as `python`, `python3`, or versioned `python3.x`
+- Python (`python`, `python3`, or `python3.x`)
+- [fzf](https://github.com/junegunn/fzf) _(optional, for fuzzy picker)_
 
 ## Install
 
-### zplug (recommended)
-
-Install zplug first if needed:
-
 ```sh
-curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+git clone https://github.com/YakovSegal/zsh-python-m-completion.git \
+  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-python-m-completion
 ```
 
-Add to `.zshrc`:
+Add to `~/.zshrc`:
 
 ```zsh
-zplug "YakovSegal/zsh-python-m-completion"
-zplug load
+plugins=(... zsh-python-m-completion)
 ```
 
-Reload shell:
+Reload:
 
 ```zsh
 source ~/.zshrc
@@ -32,26 +29,32 @@ source ~/.zshrc
 
 ## Usage
 
+Tab-complete module name after `-m`:
+
 ```zsh
-python -m json.<TAB>
-python3 -m http.<TAB>
-python3 -m unittest<TAB>
+python -m uni<TAB>
+# → unittest
+
+python3 -m http.s<TAB>
+# → http.server
+
+doppler run -- python -m mymod<TAB>
+# → mymodule
+# → mymodule.sub_module_1  mymodule.sub_module_2 ...
 ```
 
-With fzf completion widget bound to Tab:
+With fzf bound to Tab — fuzzy picker opens automatically:
 
 ```zsh
-python -m json.<TAB>
-python3 -m unit<TAB>
+python -m mymod<TAB>
+# fzf list opens → pick → inserted with dot if submodules exist
 ```
 
 ## Notes
 
-- Completes top-level modules and dotted submodules.
-- Uses current interpreter from command line.
-- Outside `-m` argument, normal file completion stays unchanged.
-- Works with prefixed commands (for example `wrapper -- python -m ...`).
-- fzf mode works from normal Tab binding and supports `python` and `python3`.
+- Works with any wrapper prefix (`doppler run --`, `env VAR=x --`, etc.).
+- Dot suffix auto-appended when module has submodules.
+- Outside `-m`, normal completion unchanged.
 
 ## Development
 
