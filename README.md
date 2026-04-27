@@ -9,59 +9,25 @@ Zsh plugin for `python -m` module completion.
 
 ## Install
 
-### Oh My Zsh
+### zplug (recommended)
+
+Install zplug first if needed:
 
 ```sh
-git clone https://github.com/YakovSegal/zsh-python-m-completion.git \
-  ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-python-m-completion
+curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 ```
 
 Add to `.zshrc`:
 
 ```zsh
-plugins=(... zsh-python-m-completion)
+zplug "YakovSegal/zsh-python-m-completion"
+zplug load
 ```
 
 Reload shell:
 
 ```zsh
 source ~/.zshrc
-```
-
-### Manual
-
-```sh
-git clone https://github.com/YakovSegal/zsh-python-m-completion.git ~/.zsh/zsh-python-m-completion
-```
-
-Add to `.zshrc`:
-
-```zsh
-source ~/.zsh/zsh-python-m-completion/zsh-python-m-completion.plugin.zsh
-```
-
-### Antigen
-
-```zsh
-antigen bundle YakovSegal/zsh-python-m-completion
-```
-
-### Antidote
-
-```txt
-YakovSegal/zsh-python-m-completion
-```
-
-### zinit
-
-```zsh
-zinit light YakovSegal/zsh-python-m-completion
-```
-
-### zplug
-
-```zsh
-zplug "YakovSegal/zsh-python-m-completion"
 ```
 
 ## Usage
@@ -72,11 +38,11 @@ python3 -m http.<TAB>
 python3 -m unittest<TAB>
 ```
 
-With fzf completion widget enabled:
+With fzf completion widget bound to Tab:
 
 ```zsh
-python -m json.**<TAB>
-python3 -m unit**<TAB>
+python -m json.<TAB>
+python3 -m unit<TAB>
 ```
 
 ## Notes
@@ -84,7 +50,8 @@ python3 -m unit**<TAB>
 - Completes top-level modules and dotted submodules.
 - Uses current interpreter from command line.
 - Outside `-m` argument, normal file completion stays unchanged.
-- fzf mode works for `python` and `python3` command names.
+- Works with prefixed commands (for example `wrapper -- python -m ...`).
+- fzf mode works from normal Tab binding and supports `python` and `python3`.
 
 ## Development
 
