@@ -1,9 +1,10 @@
+# shellcheck shell=bash disable=SC2154
 # zsh-python-m-completion.plugin.zsh
 _python_m_completion() {
     local module_index=-1
     local index
 
-    for index in {1..$#words}; do
+    for (( index = 1; index <= $#words; index++ )); do
         if [[ ${words[index]} == -m ]]; then
             module_index=$index
         fi
@@ -57,7 +58,10 @@ else:
     local -a modules
 
     output=$("$python_cmd" -c "$python_code" -- "$module_prefix" 2>/dev/null) || return 1
-    modules=(${(f)output})
+
+    while IFS= read -r module; do
+        [[ -n $module ]] && modules+=("$module")
+    done <<< "$output"
 
     if (( $#modules == 0 )); then
         return 1
