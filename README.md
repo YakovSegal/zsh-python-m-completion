@@ -72,11 +72,19 @@ python3 -m http.<TAB>
 python3 -m unittest<TAB>
 ```
 
+With fzf completion widget enabled:
+
+```zsh
+python -m json.**<TAB>
+python3 -m unit**<TAB>
+```
+
 ## Notes
 
 - Completes top-level modules and dotted submodules.
 - Uses current interpreter from command line.
 - Outside `-m` argument, normal file completion stays unchanged.
+- fzf mode works for `python` and `python3` command names.
 
 ## Development
 
