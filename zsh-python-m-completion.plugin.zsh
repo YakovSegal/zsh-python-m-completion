@@ -8,7 +8,7 @@ import importlib
 import pkgutil
 import sys
 
-prefix = sys.argv[1]
+prefix = sys.argv[1] if len(sys.argv) > 1 else ""
 seen = set()
 
 def emit(names):
@@ -41,7 +41,7 @@ else:
     )
 '
 
-    "$python_cmd" -c "$python_code" -- "$module_prefix" 2>/dev/null
+    "$python_cmd" -c "$python_code" "$module_prefix" 2>/dev/null
 }
 
 _python_m_completion() {
@@ -87,8 +87,12 @@ _python_m_fzf_completion() {
     fi
 
     local module_prefix=${prefix}
+    local module_output
 
-    _fzf_complete -- "$@" < <(_python_m_list_modules "$python_cmd" "$module_prefix")
+    module_output=$(_python_m_list_modules "$python_cmd" "$module_prefix") || return 1
+    [[ -n $module_output ]] || return 1
+
+    _fzf_complete -- "$@" < <(printf '%s\n' "$module_output")
 }
 
 _fzf_complete_python() {
@@ -112,4 +116,33 @@ _python_m_register_completion() {
     compdef _python_m_completion python python3 'python<->' 'python<->.<->'
 }
 
+_python_m_tab_widget() {
+    local line=${LBUFFER}
+
+    if whence -w fzf-completion >/dev/null 2>&1; then
+        if [[ $line =~ ^[[:space:]]*python([0-9.]+)?[[:space:]]+-m[[:space:]]+[^[:space:]]*$ ]]; then
+            local previous_trigger=${FZF_COMPLETION_TRIGGER-'**'}
+            FZF_COMPLETION_TRIGGER=''
+            zle fzf-completion
+            FZF_COMPLETION_TRIGGER=$previous_trigger
+            return
+        fi
+
+        zle fzf-completion
+        return
+    fi
+
+    zle expand-or-complete
+}
+
+_python_m_register_tab_widget() {
+    whence -w zle >/dev/null 2>&1 || return 0
+
+    if [[ $(bindkey '^I' 2>/dev/null) == *fzf-completion* ]]; then
+        zle -N _python_m_tab_widget
+        bindkey '^I' _python_m_tab_widget
+    fi
+}
+
 _python_m_register_completion
+_python_m_register_tab_widget
