@@ -4,6 +4,8 @@ Zsh plugin for `python -m` and `python3 -m` completion.
 
 It completes module names from active interpreter, including dotted submodules like `json.tool`.
 
+Repository: `YakovSegal/zsh-python-m-completion`
+
 ## Why
 
 Zsh file completion is good for paths, not Python module names.
@@ -30,24 +32,63 @@ This keeps plugin small and avoids hard-coded search paths.
 
 ## Install
 
-### Manual
+This repository follows normal Zsh plugin layout: file name matches repository name, so most plugin managers load it without extra config.
 
-Copy [zsh-python-m-completion.plugin.zsh](zsh-python-m-completion.plugin.zsh) into plugin path and source it from `.zshrc`.
+### Oh My Zsh
+
+Clone plugin into custom plugins directory:
+
+```sh
+git clone https://github.com/YakovSegal/zsh-python-m-completion.git \
+	${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-python-m-completion
+```
+
+Add plugin to `.zshrc`:
 
 ```zsh
-source /path/to/zsh-python-m-completion.plugin.zsh
+plugins=(... zsh-python-m-completion)
+```
+
+Restart shell or run:
+
+```zsh
+source ~/.zshrc
+```
+
+### Manual
+
+Clone repository anywhere and source plugin file from `.zshrc`.
+
+```sh
+git clone https://github.com/YakovSegal/zsh-python-m-completion.git ~/.zsh/zsh-python-m-completion
+```
+
+```zsh
+source ~/.zsh/zsh-python-m-completion/zsh-python-m-completion.plugin.zsh
+```
+
+### Antigen
+
+```zsh
+antigen bundle YakovSegal/zsh-python-m-completion
 ```
 
 ### Antidote
 
 ```txt
-your-name/zsh-python-m-completion
+YakovSegal/zsh-python-m-completion
 ```
 
 ### zinit
 
 ```zsh
-zinit light your-name/zsh-python-m-completion
+zinit light YakovSegal/zsh-python-m-completion
+```
+
+### zplug
+
+```zsh
+zplug "YakovSegal/zsh-python-m-completion"
 ```
 
 ## Usage
@@ -62,6 +103,8 @@ Examples:
 
 - `python -m json.<TAB>` -> `json.tool`
 - `python -m http.<TAB>` -> `http.server`
+
+If completion does not appear, reload shell with `source ~/.zshrc` and make sure plugin loads after `compinit`.
 
 ## Limits
 
@@ -84,6 +127,15 @@ shellcheck zsh-python-m-completion.plugin.zsh
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for patch rules.
+
+## Release Notes
+
+For easy public install:
+
+- Keep repository public on GitHub.
+- Keep main plugin file named `zsh-python-m-completion.plugin.zsh`.
+- Tag releases like `v0.1.0` when behavior changes.
+- Do not rename repository without updating install snippets.
 
 ## License
 
